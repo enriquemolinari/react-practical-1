@@ -6,7 +6,6 @@ import Drawer from "@material-ui/core/Drawer";
 import Box from "@material-ui/core/Box";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
-import List from "@material-ui/core/List";
 import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
@@ -18,14 +17,13 @@ import Link from "@material-ui/core/Link";
 import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import NotificationsIcon from "@material-ui/icons/Notifications";
-import { mainListItems } from "./listItems";
 
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {"Copyright © "}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
+      <Link color="inherit" href="http://www.copypasteisforword.com/">
+        Copy Paste Is For Word
       </Link>{" "}
       {new Date().getFullYear()}
       {"."}
@@ -114,7 +112,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function App(props) {
+export default function Layout(props) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const handleDrawerOpen = () => {
@@ -174,7 +172,7 @@ export default function App(props) {
           </IconButton>
         </div>
         <Divider />
-        <List>{mainListItems}</List>
+        {props.left}
       </Drawer>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
