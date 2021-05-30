@@ -126,9 +126,7 @@ export default function UsersForm(props) {
         autoHideDuration={3000}
         onClose={handleClose}
       >
-        <Alert onClose={handleClose} severity="success">
-          User Created Successfully !
-        </Alert>
+        <Alert severity="success">User Created Successfully !</Alert>
       </Snackbar>
     </>
   );

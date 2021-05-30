@@ -3,6 +3,9 @@ import { DataGrid } from "@material-ui/data-grid";
 import Button from "@material-ui/core/Button";
 import Box from "@material-ui/core/Box";
 import { makeStyles } from "@material-ui/core/styles";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import Snackbar from "@material-ui/core/Snackbar";
+import Alert from "@material-ui/lab/Alert";
 import UserDetails from "./UserDetails";
 
 const useStyles = makeStyles((theme) => ({
@@ -26,6 +29,9 @@ export default function UsersList(props) {
   const [showDetail, setShowDetail] = useState(false);
   const [userId, setUserId] = useState(0);
   const [pageSize, setPageSize] = useState(5);
+  const [loading, setLoading] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMsg, setAlertMsg] = useState("");
 
   useEffect(() => {
     fetch(
@@ -84,11 +90,37 @@ export default function UsersList(props) {
   }
 
   function handleDelete() {
-    alert("delete pressed...:" + userIdSelected);
+    setLoading(true);
+
+    fetch(props.apiUrl + "/" + userIdSelected, {
+      method: "DELETE",
+    }).then((response) => {
+      setLoading(false);
+      setAlertMsg("User Deleted Successfully");
+      setShowAlert(true);
+    });
+  }
+
+  function handleCloseAlert() {
+    setShowAlert(false);
   }
 
   function handleEditing(params) {
-    console.log(params.field + " - " + params.props.value);
+    fetch(props.apiUrl + "/" + params.id, {
+      method: "PUT",
+      body: JSON.stringify({
+        id: params.id,
+        [params.field]: params.props.value,
+      }),
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        setAlertMsg("User Updated Successfully");
+        setShowAlert(true);
+      });
   }
 
   return (
@@ -121,7 +153,8 @@ export default function UsersList(props) {
           className={`${classes.bottomRightBox} ${classes.box}`}
         >
           <Button variant="contained" color="primary" onClick={handleDelete}>
-            Delete Selected User
+            {loading && <CircularProgress color="inherit" size={24} />}
+            {!loading && "Delete Selected User"}
           </Button>
         </Box>
       </div>
@@ -137,6 +170,17 @@ export default function UsersList(props) {
         show={showDetail}
         handleClose={closeDetails}
       />
+      <Snackbar
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "center",
+        }}
+        open={showAlert}
+        autoHideDuration={3000}
+        onClose={handleCloseAlert}
+      >
+        <Alert severity="success">{alertMsg}</Alert>
+      </Snackbar>
       {/* )} */}
     </>
   );
