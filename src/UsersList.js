@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function UsersList() {
+export default function UsersList(props) {
   const [state, setPass] = useState({ result: { data: [] } });
   const [page, setPage] = useState(0);
   const [showDetail, setShowDetail] = useState(false);
@@ -29,7 +29,8 @@ export default function UsersList() {
 
   useEffect(() => {
     fetch(
-      "https://jsonplaceholder.typicode.com/users?_page=" +
+      props.apiUrl +
+        "?_page=" +
         //first page is 1 for the json server API
         //Material DataGrid first page is 0
         (page + 1) +
@@ -74,7 +75,6 @@ export default function UsersList() {
   ];
 
   function openDetails(params) {
-    //console.log(params.id);
     setUserId(params.id);
     setShowDetail(true);
   }
@@ -84,7 +84,7 @@ export default function UsersList() {
   }
 
   function handleDelete() {
-    console.log("delete pressed...:" + userIdSelected);
+    alert("delete pressed...:" + userIdSelected);
   }
 
   function handleEditing(params) {
@@ -125,11 +125,19 @@ export default function UsersList() {
           </Button>
         </Box>
       </div>
+      {/* Estando asi, el useEffects de UserDetails se ejecuta...
+      por eso tuve que poner un if en el callback. 
+      ahora, si lo hago condicional, el componente no se monta, y entonces
+      siempre al montarse ejecuta el useEffect aunque este abriendo de nuevo el popup
+      para la misma fila*/}
+      {/* {showDetail && ( */}
       <UserDetails
+        apiUrl={props.apiUrl}
         userId={userId}
         show={showDetail}
         handleClose={closeDetails}
       />
+      {/* )} */}
     </>
   );
 }
