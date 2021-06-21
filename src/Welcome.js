@@ -1,4 +1,4 @@
-export default function Welcome() {
+export default function Welcome(props) {
   return (
     <>
       <h1>Welcome to Coding in React - CRUD Application !</h1>

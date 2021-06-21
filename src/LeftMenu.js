@@ -8,19 +8,16 @@ import AddBox from "@material-ui/icons/AddBox";
 import List from "@material-ui/core/List";
 
 export default function LeftMenu(props) {
-  const [selectedIndex, setSelectedIndex] = React.useState(0);
-
-  const handleListItemClick = (event, index) => {
-    setSelectedIndex(index);
-    props.itemClicked(index);
-  };
+  function handleListItemClick(item) {
+    props.handleMenu(item);
+  }
 
   return (
     <List>
       <ListItem
-        selected={selectedIndex === 0}
+        selected={props.valueItem === props.items.WELCOME}
         button
-        onClick={(event) => handleListItemClick(event, 0)}
+        onClick={() => handleListItemClick(props.items.WELCOME)}
       >
         <ListItemIcon>
           <Home />
@@ -28,9 +25,9 @@ export default function LeftMenu(props) {
         <ListItemText primary="Welcome" />
       </ListItem>
       <ListItem
-        selected={selectedIndex === 1}
+        selected={props.valueItem === props.items.USERSLIST}
         button
-        onClick={(event) => handleListItemClick(event, 1)}
+        onClick={() => handleListItemClick(props.items.USERSLIST)}
       >
         <ListItemIcon>
           <PeopleIcon />
@@ -38,9 +35,9 @@ export default function LeftMenu(props) {
         <ListItemText primary="User Lists" />
       </ListItem>
       <ListItem
-        selected={selectedIndex === 2}
+        selected={props.valueItem === props.items.USERFORM}
         button
-        onClick={(event) => handleListItemClick(event, 2)}
+        onClick={() => handleListItemClick(props.items.USERFORM)}
       >
         <ListItemIcon>
           <AddBox />
