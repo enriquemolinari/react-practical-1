@@ -2,26 +2,18 @@ import { useEffect, useState } from "react";
 import { DataGrid } from "@material-ui/data-grid";
 import Button from "@material-ui/core/Button";
 import Box from "@material-ui/core/Box";
-import { makeStyles } from "@material-ui/core/styles";
+import { styled } from "@material-ui/core/styles";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Snackbar from "@material-ui/core/Snackbar";
 import Alert from "@material-ui/lab/Alert";
 import UserDetails from "./UserDetails";
 
-const useStyles = makeStyles((theme) => ({
-  box: {
-    height: 50,
-    display: "flex",
-  },
-  bottomRightBox: {
-    justifyContent: "flex-end",
-    alignItems: "flex-end",
-  },
-  spreadBox: {
-    justifyContent: "space-between",
-    alignItems: "right",
-  },
-}));
+const StyledBox = styled(Box)({
+  height: 40,
+  display: "flex",
+  justifyContent: "flex-end",
+  marginTop: 10,
+});
 
 export default function UsersList(props) {
   const [state, setPass] = useState({ result: { data: [] } });
@@ -55,7 +47,6 @@ export default function UsersList(props) {
   }, [page, pageSize]);
 
   let userIdSelected = 0;
-  const classes = useStyles();
 
   const columns = [
     { field: "id", headerName: "ID", width: 60 },
@@ -148,15 +139,12 @@ export default function UsersList(props) {
         />
       </div>
       <div>
-        <Box
-          component="div"
-          className={`${classes.bottomRightBox} ${classes.box}`}
-        >
+        <StyledBox component="div">
           <Button variant="contained" color="primary" onClick={handleDelete}>
             {loading && <CircularProgress color="inherit" size={24} />}
             {!loading && "Delete Selected User"}
           </Button>
-        </Box>
+        </StyledBox>
       </div>
       {/* Estando asi, el useEffects de UserDetails se ejecuta...
       por eso tuve que poner un if en el callback. 
