@@ -7,7 +7,11 @@ import Alert from "@material-ui/lab/Alert";
 import "./form.css";
 
 export default function UsersForm(props) {
-  const [inputsValue, setInputsValue] = useState({});
+  const [inputsValue, setInputsValue] = useState({
+    name: "",
+    username: "",
+    email: "",
+  });
   const [loading, setLoading] = useState(false);
   const [errorInputs, setErrorInputs] = useState({});
   const [showSuccess, setShowSuccess] = useState(false);
@@ -80,7 +84,7 @@ export default function UsersForm(props) {
             helperText={errorInputs.name ? errorInputs.name : ""}
             required={true}
             fullWidth={true}
-            value={inputsValue.value}
+            value={inputsValue.name}
             onChange={handleChange}
           />
         </div>
@@ -93,7 +97,7 @@ export default function UsersForm(props) {
             helperText={errorInputs.username ? errorInputs.username : ""}
             required={true}
             fullWidth={true}
-            value={inputsValue.value}
+            value={inputsValue.username}
             onChange={handleChange}
           />
         </div>
@@ -106,7 +110,7 @@ export default function UsersForm(props) {
             helperText={errorInputs.email ? errorInputs.email : ""}
             required={true}
             fullWidth={true}
-            value={inputsValue.value}
+            value={inputsValue.email}
             onChange={handleChange}
           />
         </div>
