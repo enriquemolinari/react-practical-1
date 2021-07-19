@@ -14,18 +14,18 @@ export default function UserDetails(props) {
 
   useEffect(() => {
     if (props.userId > 0) {
-      fetch(props.apiUrl + "/" + props.userId)
-        .then((response) => response.json())
-        .then((response) => {
-          setUserData({ result: { response } });
-          setLoading(false);
-        });
+      const fetchUser = async () => {
+        let response = await fetch(props.apiUrl + "/" + props.userId);
+        response = await response.json();
+        setUserData({ result: { response } });
+        setLoading(false);
+      };
+      fetchUser();
     }
-    /*El clean up se ejecuta antes de useEffect pero SOLO 
-     si este va a ejecutarse. Con lo cual si no cambio el userId, sigue estando el valor
-     anterior. Solo si cambia, entonces primero lo limpia.
-     Si no pongo esto, se ve el json anterior y despues se reemplaza
-     cuando vuelve el json nuevo del fetch*/
+    /*The clean up is executed before the next useEffect but only 
+     if this is going to be executed.
+     If this cleanup is not used, you will will the previous 
+     value from the previous fetch.*/
     return setLoading(true);
   }, [props.userId]);
 
