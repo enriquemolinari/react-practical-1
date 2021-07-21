@@ -16,7 +16,7 @@ const StyledBox = styled(Box)({
 });
 
 export default function UsersList(props) {
-  const [state, setPass] = useState({ result: { data: [] } });
+  const [users, setUsers] = useState({ result: { data: [] } });
   const [page, setPage] = useState(0);
   const [showDetail, setShowDetail] = useState(false);
   const [userId, setUserId] = useState(0);
@@ -42,7 +42,7 @@ export default function UsersList(props) {
         }))
       )
       .then((response) => {
-        setPass({ result: { total: response.total, data: response.data } });
+        setUsers({ result: { total: response.total, data: response.data } });
       });
   }, [page, pageSize]);
 
@@ -118,7 +118,7 @@ export default function UsersList(props) {
     <>
       <div style={{ height: 420, width: "100%" }}>
         <DataGrid
-          rows={state.result.data}
+          rows={users.result.data}
           columns={columns}
           pageSize={pageSize}
           paginationMode="server"
@@ -130,7 +130,7 @@ export default function UsersList(props) {
             setPageSize(params.pageSize);
           }}
           rowsPerPageOptions={[3, 5]}
-          rowCount={parseInt(state.result.total)}
+          rowCount={parseInt(users.result.total)}
           //to delete the selected row
           onRowSelected={(e) => (userIdSelected = e.data.id)}
           //editing
