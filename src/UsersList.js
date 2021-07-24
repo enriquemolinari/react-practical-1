@@ -26,7 +26,11 @@ export default function UsersList(props) {
   const [alertMsg, setAlertMsg] = useState("");
 
   useEffect(() => {
-    fetch(
+    fetchUsers();
+  }, [page, pageSize]);
+
+  async function fetchUsers() {
+    let response = await fetch(
       props.apiUrl +
         "?_page=" +
         //first page is 1 for the json server API
@@ -34,17 +38,14 @@ export default function UsersList(props) {
         (page + 1) +
         "&_limit=" +
         pageSize
-    )
-      .then((response) =>
-        response.json().then((json) => ({
-          total: response.headers.get("x-total-Count"),
-          data: json,
-        }))
-      )
-      .then((response) => {
-        setUsers({ result: { total: response.total, data: response.data } });
-      });
-  }, [page, pageSize]);
+    );
+    let json = await response.json();
+    response = {
+      total: response.headers.get("x-total-Count"),
+      data: json,
+    };
+    setUsers({ result: { total: response.total, data: response.data } });
+  }
 
   let userIdSelected = 0;
 
@@ -80,24 +81,32 @@ export default function UsersList(props) {
     setShowDetail(false);
   }
 
-  function handleDelete() {
+  async function handleDelete() {
+    if (userIdSelected === 0) {
+      setAlertMsg("Please, select a row of the grid first");
+      setShowAlert(true);
+      return;
+    }
+
     setLoading(true);
 
-    fetch(props.apiUrl + "/" + userIdSelected, {
+    await fetch(props.apiUrl + "/" + userIdSelected, {
       method: "DELETE",
-    }).then((response) => {
-      setLoading(false);
-      setAlertMsg("User Deleted Successfully");
-      setShowAlert(true);
     });
+
+    setLoading(false);
+    setAlertMsg("User Deleted Successfully");
+    setShowAlert(true);
+    //refresh the grid data after delete
+    fetchUsers();
   }
 
   function handleCloseAlert() {
     setShowAlert(false);
   }
 
-  function handleEditing(params) {
-    fetch(props.apiUrl + "/" + params.id, {
+  async function handleEditing(params) {
+    await fetch(props.apiUrl + "/" + params.id, {
       method: "PUT",
       body: JSON.stringify({
         id: params.id,
@@ -106,12 +115,9 @@ export default function UsersList(props) {
       headers: {
         "Content-type": "application/json; charset=UTF-8",
       },
-    })
-      .then((response) => response.json())
-      .then((json) => {
-        setAlertMsg("User Updated Successfully");
-        setShowAlert(true);
-      });
+    });
+    setAlertMsg("User Updated Successfully");
+    setShowAlert(true);
   }
 
   return (
@@ -146,12 +152,6 @@ export default function UsersList(props) {
           </Button>
         </StyledBox>
       </div>
-      {/* Estando asi, el useEffects de UserDetails se ejecuta...
-      por eso tuve que poner un if en el callback. 
-      ahora, si lo hago condicional, el componente no se monta, y entonces
-      siempre al montarse ejecuta el useEffect aunque este abriendo de nuevo el popup
-      para la misma fila*/}
-      {/* {showDetail && ( */}
       <UserDetails
         apiUrl={props.apiUrl}
         userId={userId}
@@ -169,7 +169,6 @@ export default function UsersList(props) {
       >
         <Alert severity="success">{alertMsg}</Alert>
       </Snackbar>
-      {/* )} */}
     </>
   );
 }
