@@ -64,7 +64,7 @@ export default function UsersList(props) {
           color="primary"
           size="small"
           style={{ marginLeft: 16 }}
-          onClick={() => openDetails(params.row)}
+          onClick={() => openDetails(params.row.id)}
         >
           More...
         </Button>
@@ -72,8 +72,8 @@ export default function UsersList(props) {
     },
   ];
 
-  function openDetails(params) {
-    setUserId(params.id);
+  function openDetails(rowId) {
+    setUserId(rowId);
     setShowDetail(true);
   }
 
@@ -106,6 +106,8 @@ export default function UsersList(props) {
   }
 
   async function handleEditing(params) {
+    console.log("asdf: " + params.field);
+    console.log("asdf: " + [params.field]);
     await fetch(props.apiUrl + "/" + params.id, {
       method: "PUT",
       body: JSON.stringify({

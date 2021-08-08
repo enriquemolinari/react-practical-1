@@ -19,6 +19,7 @@ export default function UsersForm(props) {
   function handleSubmit(e) {
     e.preventDefault();
     setLoading(true);
+    setErrorInputs({});
     fetch(props.apiUrl, {
       method: "POST",
       body: JSON.stringify({
@@ -33,7 +34,6 @@ export default function UsersForm(props) {
       .then((response) => response.json())
       .then((json) => {
         setLoading(false);
-        setErrorInputs({});
         checkResponse(json);
       });
   }
@@ -45,12 +45,15 @@ export default function UsersForm(props) {
   function handleChange(e) {
     const name = e.target.name;
     const value = e.target.value;
-    setInputsValue({ ...inputsValue, [name]: value });
+    setInputsValue((inputsValue) => {
+      return { ...inputsValue, [name]: value };
+    });
   }
 
   function checkResponse(json) {
     if (json.name && json.userName && json.email) {
       setShowSuccess(true);
+      return;
     }
     if (!json.name) {
       setErrorInputs((errorInputs) => ({
@@ -117,7 +120,7 @@ export default function UsersForm(props) {
         <div>
           <Button type="submit" variant="contained" color="primary">
             {loading && <CircularProgress color="inherit" size={24} />}
-            {!loading && "Save"}
+            {!loading && "Submit"}
           </Button>
         </div>
       </form>

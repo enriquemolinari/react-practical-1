@@ -13,15 +13,16 @@ export default function UserDetails(props) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (props.userId > 0) {
-      const fetchUser = async () => {
-        let response = await fetch(props.apiUrl + "/" + props.userId);
-        response = await response.json();
-        setUserData({ result: { response } });
-        setLoading(false);
-      };
-      fetchUser();
-    }
+    if (props.userId <= 0) return;
+
+    const fetchUser = async () => {
+      let response = await fetch(props.apiUrl + "/" + props.userId);
+      response = await response.json();
+      setUserData({ result: { response } });
+      setLoading(false);
+    };
+    fetchUser();
+
     /*The clean up is executed before the next useEffect but only 
      if this is going to be executed.
      If this cleanup is not used, you will will the previous 
@@ -30,12 +31,8 @@ export default function UserDetails(props) {
   }, [props.userId]);
 
   return (
-    <Dialog
-      open={props.show}
-      aria-labelledby="alert-dialog-title"
-      aria-describedby="alert-dialog-description"
-    >
-      <DialogTitle id="alert-dialog-title">{"User Details"}</DialogTitle>
+    <Dialog open={props.show}>
+      <DialogTitle id="alert-dialog-title">User Details</DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
           {loading ? (
