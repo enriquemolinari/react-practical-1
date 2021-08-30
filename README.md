@@ -5,6 +5,6 @@ Simple CRUD is a single page application built with React as part of the book Un
 # Install and Start
 
 - git clone https://github.com/enriquemolinari/react-practical-1.git simple-crud
-- cd react-practical-1
+- cd simple-crud
 - npm install
 - npm start
